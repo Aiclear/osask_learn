@@ -170,7 +170,9 @@ void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, int memtotal)
 		cmd_dir(cons);
 	} else if (strncmp(cmdline, "type ", 5) == 0) {
 		cmd_type(cons, fat, cmdline);
-	} else if (cmdline[0] != 0) {
+    } else if (strcmp(cmdline, "exit") == 0) {
+        cmd_exit(cons, fat);
+    }else if (cmdline[0] != 0) {
 		if (cmd_app(cons, fat, cmdline) == 0) {
 			/* ƒRƒ}ƒ“ƒh‚Å‚Í‚È‚­AƒAƒvƒŠ‚Å‚à‚È‚­A‚³‚ç‚É‹ós‚Å‚à‚È‚¢ */
 			cons_putstr0(cons, "Bad command.\n\n");
@@ -245,6 +247,22 @@ void cmd_type(struct CONSOLE *cons, int *fat, char *cmdline)
 	}
 	cons_newline(cons);
 	return;
+}
+
+void cmd_exit(struct CONSOLE *cons, int *fat)
+{
+    struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
+    struct TASK *task = task_now();
+    struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
+    struct FIFO32 *fifo = (struct FIFO32 *) *((int *) 0x0fec);
+    timer_cancel(cons->timer);
+    memman_free_4k(memman, (int) fat, 4 * 2880);
+    io_cli();
+    fifo32_put(fifo, cons->sht - shtctl->sheets0 + 768);	/* 768〜1023 */
+    io_sti();
+    for (;;) {
+        task_sleep(task);
+    }
 }
 
 int cmd_app(struct CONSOLE *cons, int *fat, char *cmdline)
