@@ -157,14 +157,11 @@ void HariMain(void)
 						s[0] += 0x20;	/* ‘å•¶Žš‚ð¬•¶Žš‚É•ÏŠ· */
 					}
 				}
-				if (s[0] != 0) { /* ’Êí•¶Žš */
+				if (s[0] != 0) { /* Enter backspace 普通字符 */
                     fifo32_put(&key_win->task->fifo, s[0] + 256);
 				}
 				if (i == 256 + 0x0e) {	/* ƒoƒbƒNƒXƒy[ƒX */
                     fifo32_put(&key_win->task->fifo, 8 + 256);
-				}
-				if (i == 256 + 0x1c) {	/* Enter */
-                    fifo32_put(&key_win->task->fifo, 10 + 256);
 				}
 				if (i == 256 + 0x0f) {	/* Tab */
                     keywin_off(key_win);
@@ -205,8 +202,7 @@ void HariMain(void)
 				if (i == 256 + 0x3b && key_shift != 0) {	/* Shift+F1 */
                     task = key_win->task;
                     if (task != 0 && task->tss.ss0 != 0) {
-                        cons = (struct CONSOLE *) *((int *) 0x0fec);
-                        cons_putstr0(cons, "\nBreak(key) :\n");
+                        cons_putstr0(task->cons, "\nBreak(key) :\n");
                         io_cli();	/* ‹­§I—¹ˆ—’†‚Éƒ^ƒXƒN‚ª•Ï‚í‚é‚Æ¢‚é‚©‚ç */
                         task->tss.eax = (int) &(task->tss.esp0);
                         task->tss.eip = (int) asm_end_app;
