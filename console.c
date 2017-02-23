@@ -17,7 +17,7 @@ void console_task(struct SHEET *sheet, int memtotal)
 	cons.cur_c = -1;
 	task->cons = &cons;
 
-    if (sheet != 0) {
+    if (cons.sht != 0) {
         cons.timer = timer_alloc();
         timer_init(cons.timer, &task->fifo, 1);
         timer_settime(cons.timer, 50);
@@ -35,7 +35,7 @@ void console_task(struct SHEET *sheet, int memtotal)
 		} else {
 			i = fifo32_get(&task->fifo);
 			io_sti();
-			if (i <= 1) { /* ƒJ[ƒ\ƒ‹—pƒ^ƒCƒ} */
+			if (i <= 1 && cons.sht != 0) { /* ƒJ[ƒ\ƒ‹—pƒ^ƒCƒ} */
 				if (i != 0) {
 					timer_init(cons.timer, &task->fifo, 0); /* ŽŸ‚Í0‚ð */
 					if (cons.cur_c >= 0) {
@@ -53,7 +53,10 @@ void console_task(struct SHEET *sheet, int memtotal)
 				cons.cur_c = COL8_FFFFFF;
 			}
 			if (i == 3) {	/* ƒJ[ƒ\ƒ‹OFF */
-				boxfill8(sheet->buf, sheet->bxsize, COL8_000000, cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+                if (cons.sht != 0) {
+                    boxfill8(cons.sht->buf, cons.sht->bxsize, COL8_000000,
+                             cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+                }
 				cons.cur_c = -1;
 			}
             if (i == 4) { /* 通过鼠标关闭console 窗口 */
@@ -72,7 +75,7 @@ void console_task(struct SHEET *sheet, int memtotal)
 					cmdline[cons.cur_x / 8 - 2] = 0;
 					cons_newline(&cons);
 					cons_runcmd(cmdline, &cons, fat, memtotal);	/* ƒRƒ}ƒ“ƒhŽÀs */
-                    if (sheet == 0) {
+                    if (cons.sht == 0) {
                         cmd_exit(&cons, fat);
                     }
 					cons_putchar(&cons, '>', 1);
@@ -85,12 +88,12 @@ void console_task(struct SHEET *sheet, int memtotal)
 					}
 				}
 			}
-            if (sheet != 0) {
+            if (cons.sht != 0) {
                 /* 重新显示光标 */
                 if (cons.cur_c >= 0) {
-                    boxfill8(sheet->buf, sheet->bxsize, cons.cur_c, cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
+                    boxfill8(cons.sht->buf, cons.sht->bxsize, cons.cur_c, cons.cur_x, cons.cur_y, cons.cur_x + 7, cons.cur_y + 15);
                 }
-                sheet_refresh(sheet, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
+                sheet_refresh(cons.sht, cons.cur_x, cons.cur_y, cons.cur_x + 8, cons.cur_y + 16);
             }
 		}
 	}
@@ -399,6 +402,7 @@ int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int 
 	struct CONSOLE *cons = task->cons;
 	struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
 	struct SHEET *sht;
+    struct FIFO32 *sys_fifo = (struct FIFO32 *) *((int *) 0x0fec);
 	int *reg = &eax + 1;	/* eax‚ÌŽŸ‚Ì”Ô’n */
 		/* •Û‘¶‚Ì‚½‚ß‚ÌPUSHAD‚ð‹­ˆø‚É‘‚«Š·‚¦‚é */
 		/* reg[0] : EDI,   reg[1] : ESI,   reg[2] : EBP,   reg[3] : ESP */
@@ -487,6 +491,13 @@ int *hrb_api(int edi, int esi, int ebp, int esp, int ebx, int edx, int ecx, int 
 			if (i == 3) {	/* ƒJ[ƒ\ƒ‹OFF */
 				cons->cur_c = -1;
 			}
+            if (i == 4) {
+                timer_cancel(cons->timer);
+                io_cli();
+                fifo32_put(sys_fifo, cons->sht - shtctl->sheets0 + 2024);
+                cons->sht = 0;
+                io_sti();
+            }
 			if (i >= 256) { /* ƒL[ƒ{[ƒhƒf[ƒ^iƒ^ƒXƒNAŒo—Rj‚È‚Ç */
 				reg[7] = i - 256;
 				return 0;

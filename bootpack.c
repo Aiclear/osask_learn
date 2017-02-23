@@ -22,7 +22,7 @@ void HariMain(void)
 	struct MOUSE_DEC mdec;
 	struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
 	unsigned char *buf_back, buf_mouse[256];
-	struct SHEET *sht_back, *sht_mouse;
+	struct SHEET *sht_back, *sht_mouse, *sht2;
 	struct TASK *task_a, *task;
 	static char keytable0[0x80] = {
 		0,   0,   '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '^', 0,   0,
@@ -271,6 +271,10 @@ void HariMain(void)
                                                 task_run(task, -1, 0);
                                             }else {
                                                 task = sht->task;
+                                                sheet_updown(key_win, -1);
+                                                keywin_off(key_win);
+                                                key_win = shtctl->sheets[shtctl->top - 1];
+                                                keywin_on(key_win);
                                                 io_cli();
                                                 fifo32_put(&task->fifo, 4);
                                                 io_sti();
@@ -301,6 +305,10 @@ void HariMain(void)
                 close_console(shtctl->sheets0 + (i - 768));
             }else if (1024 <= i && i <= 2023) {
                 close_constask(taskctl->tasks0 + (i - 1024));
+            }else if (2024 <= i && i <= 2279) {
+                sht2 = shtctl->sheets0 + (i - 2024);
+                memman_free_4k(memman, (int) sht2->buf, 256 * 165);
+                sheet_free(sht2);
             }
 		}
 	}
