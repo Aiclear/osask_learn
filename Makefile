@@ -46,6 +46,12 @@ bootpack.bim : $(OBJS_BOOTPACK) Makefile
 bootpack.hrb : bootpack.bim Makefile
 	$(BIM2HRB) bootpack.bim bootpack.hrb 0
 
+crack7.bim : crack7.obj Makefile
+	$(OBJ2BIM) @$(RULEFILE) out:crack7.bim map:crack7.map crack7.obj a_nask.obj
+
+crack7.hrb : crack7.bim Makefile
+	$(BIM2HRB) crack7.bim crack7.hrb 0k
+
 hello.hrb : hello.nas Makefile
 	$(NASK) hello.nas hello.hrb hello.lst
 
@@ -164,12 +170,14 @@ haribote.img : ipl10.bin haribote.sys Makefile \
 				hello4.hrb hello5.hrb winhelo.hrb \
 				winhelo2.hrb winhelo3.hrb star1.hrb \
 				stars.hrb stars2.hrb lines.hrb walk.hrb \
-				noodle.hrb beepdown.hrb color.hrb color2.hrb
+				noodle.hrb beepdown.hrb color.hrb color2.hrb \
+				crack7.hrb
 	$(EDIMG)   imgin:../z_tools/fdimg0at.tek \
 		wbinimg src:ipl10.bin len:512 from:0 to:0 \
 		copy from:haribote.sys to:@: \
 		copy from:ipl10.nas to:@: \
 		copy from:make.bat to:@: \
+		copy from:crack7.hrb to:@: \
 		copy from:hello.hrb to:@: \
 		copy from:hello2.hrb to:@: \
 		copy from:hello3.hrb to:@: \
