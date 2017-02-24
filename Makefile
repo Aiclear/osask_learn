@@ -43,6 +43,7 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 		copy from:color/color.hrb to:@: \
 		copy from:color2/color2.hrb to:@: \
 		copy from:sosu/sosu.hrb to:@: \
+		copy from:sosu2/sosu2.hrb to:@: \
 		copy from:sosu3/sosu3.hrb to:@: \
 		imgout:haribote.img
 
@@ -77,7 +78,7 @@ full :
 	$(MAKE) -C color
 	$(MAKE) -C color2
 	$(MAKE) -C sosu
-	# $(MAKE) -C sosu2
+	$(MAKE) -C sosu2
 	$(MAKE) -C sosu3
 	$(MAKE) haribote.img
 
@@ -121,7 +122,7 @@ clean_full :
 	$(MAKE) -C color		clean
 	$(MAKE) -C color2		clean
 	$(MAKE) -C sosu			clean
-	# $(MAKE) -C sosu2		clean
+	$(MAKE) -C sosu2		clean
 	$(MAKE) -C sosu3		clean
 
 src_only_full :
