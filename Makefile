@@ -76,6 +76,7 @@ full :
 	$(MAKE) -C color
 	$(MAKE) -C color2
 	$(MAKE) -C sosu
+	$(MAKE) -C sosu2
 	$(MAKE) haribote.img
 
 run_full :
