@@ -48,6 +48,11 @@ void HariMain(void)
 	int j, x, y, mmx = -1, mmy = -1, mmx2 = 0;
 	struct SHEET *sht = 0, *key_win;
 
+    int *fat;
+    unsigned char *nihongo;
+    struct FILEINFO *finfo;
+    extern char hankaku[4096];
+
 	init_gdtidt();
 	init_pic();
 	io_sti(); /* IDT/PIC‚Ì‰Šú‰»‚ªI‚í‚Á‚½‚Ì‚ÅCPU‚ÌŠ„‚èž‚Ý‹ÖŽ~‚ð‰ðœ */
@@ -71,6 +76,7 @@ void HariMain(void)
 	fifo.task = task_a;
 	task_run(task_a, 1, 2);
 	*((int *) 0x0fe4) = (int) shtctl;
+    task_a->langmode = 0;
 
 	/* sht_back */
 	sht_back  = sheet_alloc(shtctl);
@@ -96,9 +102,27 @@ void HariMain(void)
 	sheet_updown(sht_mouse,    2);
     keywin_on(key_win);
 
-	/* Å‰‚ÉƒL[ƒ{[ƒhó‘Ô‚Æ‚ÌH‚¢ˆá‚¢‚ª‚È‚¢‚æ‚¤‚ÉAÝ’è‚µ‚Ä‚¨‚­‚±‚Æ‚É‚·‚é */
+    /* 等待键盘接收数据的状态完成 */
 	fifo32_put(&keycmd, KEYCMD_LED);
 	fifo32_put(&keycmd, key_leds);
+
+    /* 载入nihongo.fnt */
+    nihongo = (unsigned char *) memman_alloc_4k(memman, 16 * 256 + 32 * 94 * 47);
+    fat = (int *) memman_alloc_4k(memman, 4 * 2880);
+    file_readfat(fat, (unsigned char *) ADR_DISKIMG + 0x000200);
+    finfo = file_search("nihongo.fnt", (struct FILEINFO *) (ADR_DISKIMG + 0x002600), 224);
+    if (finfo != 0) {
+        file_loadfile(finfo->clustno, finfo->size, nihongo, fat, (char *) (ADR_DISKIMG + 0x003e00));
+    }else {
+        for (i = 0; i < 16 * 256; i++) {
+            nihongo[i] = hankaku[i];
+        }
+        for (i = 16 * 256; i < 16 * 256 + 32 * 94 * 47; i++) {
+            nihongo[i] = 0xff;
+        }
+    }
+    *((int *) 0x0fe8) = (int) nihongo;
+    memman_free_4k(memman, (int) fat, 4 * 2880);
 
 	for (;;) {
 		if (fifo32_status(&keycmd) > 0 && keycmd_wait < 0) {
