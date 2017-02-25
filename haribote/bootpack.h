@@ -1,10 +1,10 @@
 /* asmhead.nas */
 struct BOOTINFO { /* 0x0ff0-0x0fff */
-	char cyls; /* ƒu[ƒgƒZƒNƒ^‚Í‚Ç‚±‚Ü‚ÅƒfƒBƒXƒN‚ğ“Ç‚ñ‚¾‚Ì‚© */
-	char leds; /* ƒu[ƒg‚ÌƒL[ƒ{[ƒh‚ÌLED‚Ìó‘Ô */
-	char vmode; /* ƒrƒfƒIƒ‚[ƒh  ‰½ƒrƒbƒgƒJƒ‰[‚© */
+	char cyls; /* Æ’uÂ[Æ’gÆ’ZÆ’NÆ’^â€šÃâ€šÃ‡â€šÂ±â€šÃœâ€šÃ…Æ’fÆ’BÆ’XÆ’Nâ€šÃ°â€œÃ‡â€šÃ±â€šÂ¾â€šÃŒâ€šÂ© */
+	char leds; /* Æ’uÂ[Æ’gÅ½Å¾â€šÃŒÆ’LÂ[Æ’{Â[Æ’hâ€šÃŒLEDâ€šÃŒÂÃ³â€˜Ã” */
+	char vmode; /* Æ’rÆ’fÆ’IÆ’â€šÂ[Æ’h  â€°Â½Æ’rÆ’bÆ’gÆ’JÆ’â€°Â[â€šÂ© */
 	char reserve;
-	short scrnx, scrny; /* ‰æ–Ê‰ğ‘œ“x */
+	short scrnx, scrny; /* â€°Ã¦â€“ÃŠâ€°Ã°â€˜Å“â€œx */
 	char *vram;
 };
 #define ADR_BOOTINFO	0x00000ff0
@@ -132,12 +132,12 @@ void enable_mouse(struct FIFO32 *fifo, int data0, struct MOUSE_DEC *mdec);
 int mouse_decode(struct MOUSE_DEC *mdec, unsigned char dat);
 
 /* memory.c */
-#define MEMMAN_FREES		4090	/* ‚±‚ê‚Å–ñ32KB */
+#define MEMMAN_FREES		4090	/* â€šÂ±â€šÃªâ€šÃ…â€“Ã±32KB */
 #define MEMMAN_ADDR			0x003c0000
-struct FREEINFO {	/* ‚ ‚«î•ñ */
+struct FREEINFO {	/* â€šÂ â€šÂ«ÂÃ®â€¢Ã± */
 	unsigned int addr, size;
 };
-struct MEMMAN {		/* ƒƒ‚ƒŠŠÇ— */
+struct MEMMAN {		/* Æ’ÂÆ’â€šÆ’Å Å Ã‡â€”Â */
 	int frees, maxfrees, lostsize, losts;
 	struct FREEINFO free[MEMMAN_FREES];
 };
@@ -196,8 +196,8 @@ int timer_cancel(struct TIMER *timer);
 void timer_cancelall(struct FIFO32 *fifo);
 
 /* mtask.c */
-#define MAX_TASKS		1000	/* Å‘åƒ^ƒXƒN” */
-#define TASK_GDT0		3		/* TSS‚ğGDT‚Ì‰½”Ô‚©‚çŠ„‚è“–‚Ä‚é‚Ì‚© */
+#define MAX_TASKS		1000	/* ÂÃ…â€˜Ã¥Æ’^Æ’XÆ’NÂâ€ */
+#define TASK_GDT0		3		/* TSSâ€šÃ°GDTâ€šÃŒâ€°Â½â€Ã”â€šÂ©â€šÃ§Å â€â€šÃ¨â€œâ€“â€šÃ„â€šÃ©â€šÃŒâ€šÂ© */
 #define MAX_TASKS_LV	100
 #define MAX_TASKLEVELS	10
 struct TSS32 {
@@ -207,7 +207,7 @@ struct TSS32 {
 	int ldtr, iomap;
 };
 struct TASK {
-	int sel, flags; /* sel‚ÍGDT‚Ì”Ô†‚Ì‚±‚Æ */
+	int sel, flags; /* selâ€šÃGDTâ€šÃŒâ€Ã”Ââ€ â€šÃŒâ€šÂ±â€šÃ† */
 	int level, priority;
 	struct FIFO32 fifo;
 	struct TSS32 tss;
@@ -217,16 +217,16 @@ struct TASK {
     struct FILEHANDLE *fhandle;
     int *fat;
     char *cmdline;
-    char langmode;
+    unsigned char langmode, langbyte1; /* NOTE:åœ¨è¿™é‡Œ char å’Œ unsigned char å·®åˆ«å¾ˆå¤§ */
 };
 struct TASKLEVEL {
-	int running; /* “®ì‚µ‚Ä‚¢‚éƒ^ƒXƒN‚Ì” */
-	int now; /* Œ»İ“®ì‚µ‚Ä‚¢‚éƒ^ƒXƒN‚ª‚Ç‚ê‚¾‚©•ª‚©‚é‚æ‚¤‚É‚·‚é‚½‚ß‚Ì•Ï” */
+	int running; /* â€œÂ®ÂÃ¬â€šÂµâ€šÃ„â€šÂ¢â€šÃ©Æ’^Æ’XÆ’Nâ€šÃŒÂâ€ */
+	int now; /* Å’Â»ÂÃâ€œÂ®ÂÃ¬â€šÂµâ€šÃ„â€šÂ¢â€šÃ©Æ’^Æ’XÆ’Nâ€šÂªâ€šÃ‡â€šÃªâ€šÂ¾â€šÂ©â€¢Âªâ€šÂ©â€šÃ©â€šÃ¦â€šÂ¤â€šÃ‰â€šÂ·â€šÃ©â€šÂ½â€šÃŸâ€šÃŒâ€¢ÃÂâ€ */
 	struct TASK *tasks[MAX_TASKS_LV];
 };
 struct TASKCTL {
-	int now_lv; /* Œ»İ“®ì’†‚ÌƒŒƒxƒ‹ */
-	char lv_change; /* Ÿ‰ñƒ^ƒXƒNƒXƒCƒbƒ`‚Ì‚Æ‚«‚ÉAƒŒƒxƒ‹‚à•Ï‚¦‚½‚Ù‚¤‚ª‚¢‚¢‚©‚Ç‚¤‚© */
+	int now_lv; /* Å’Â»ÂÃâ€œÂ®ÂÃ¬â€™â€ â€šÃŒÆ’Å’Æ’xÆ’â€¹ */
+	char lv_change; /* Å½Å¸â€°Ã±Æ’^Æ’XÆ’NÆ’XÆ’CÆ’bÆ’`â€šÃŒâ€šÃ†â€šÂ«â€šÃ‰ÂAÆ’Å’Æ’xÆ’â€¹â€šÃ â€¢Ãâ€šÂ¦â€šÂ½â€šÃ™â€šÂ¤â€šÂªâ€šÂ¢â€šÂ¢â€šÂ©â€šÃ‡â€šÂ¤â€šÂ© */
 	struct TASKLEVEL level[MAX_TASKLEVELS];
 	struct TASK tasks0[MAX_TASKS];
 };

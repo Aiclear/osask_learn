@@ -1,26 +1,26 @@
-/* ƒOƒ‰ƒtƒBƒbƒNˆ—ŠÖŒW */
+/* Æ’OÆ’â€°Æ’tÆ’BÆ’bÆ’NÂË†â€”ÂÅ Ã–Å’W */
 
 #include "bootpack.h"
 
 void init_palette(void)
 {
 	static unsigned char table_rgb[16 * 3] = {
-		0x00, 0x00, 0x00,	/*  0:• */
-		0xff, 0x00, 0x00,	/*  1:–¾‚é‚¢Ô */
-		0x00, 0xff, 0x00,	/*  2:–¾‚é‚¢—Î */
-		0xff, 0xff, 0x00,	/*  3:–¾‚é‚¢‰©F */
-		0x00, 0x00, 0xff,	/*  4:–¾‚é‚¢Â */
-		0xff, 0x00, 0xff,	/*  5:–¾‚é‚¢‡ */
-		0x00, 0xff, 0xff,	/*  6:–¾‚é‚¢…F */
-		0xff, 0xff, 0xff,	/*  7:”’ */
-		0xc6, 0xc6, 0xc6,	/*  8:–¾‚é‚¢ŠDF */
-		0x84, 0x00, 0x00,	/*  9:ˆÃ‚¢Ô */
-		0x00, 0x84, 0x00,	/* 10:ˆÃ‚¢—Î */
-		0x84, 0x84, 0x00,	/* 11:ˆÃ‚¢‰©F */
-		0x00, 0x00, 0x84,	/* 12:ˆÃ‚¢Â */
-		0x84, 0x00, 0x84,	/* 13:ˆÃ‚¢‡ */
-		0x00, 0x84, 0x84,	/* 14:ˆÃ‚¢…F */
-		0x84, 0x84, 0x84	/* 15:ˆÃ‚¢ŠDF */
+		0x00, 0x00, 0x00,	/*  0:Ââ€¢ */
+		0xff, 0x00, 0x00,	/*  1:â€“Â¾â€šÃ©â€šÂ¢ÂÃ” */
+		0x00, 0xff, 0x00,	/*  2:â€“Â¾â€šÃ©â€šÂ¢â€”Ã */
+		0xff, 0xff, 0x00,	/*  3:â€“Â¾â€šÃ©â€šÂ¢â€°Â©ÂF */
+		0x00, 0x00, 0xff,	/*  4:â€“Â¾â€šÃ©â€šÂ¢ÂÃ‚ */
+		0xff, 0x00, 0xff,	/*  5:â€“Â¾â€šÃ©â€šÂ¢Å½â€¡ */
+		0x00, 0xff, 0xff,	/*  6:â€“Â¾â€šÃ©â€šÂ¢Ââ€¦ÂF */
+		0xff, 0xff, 0xff,	/*  7:â€â€™ */
+		0xc6, 0xc6, 0xc6,	/*  8:â€“Â¾â€šÃ©â€šÂ¢Å DÂF */
+		0x84, 0x00, 0x00,	/*  9:Ë†Ãƒâ€šÂ¢ÂÃ” */
+		0x00, 0x84, 0x00,	/* 10:Ë†Ãƒâ€šÂ¢â€”Ã */
+		0x84, 0x84, 0x00,	/* 11:Ë†Ãƒâ€šÂ¢â€°Â©ÂF */
+		0x00, 0x00, 0x84,	/* 12:Ë†Ãƒâ€šÂ¢ÂÃ‚ */
+		0x84, 0x00, 0x84,	/* 13:Ë†Ãƒâ€šÂ¢Å½â€¡ */
+		0x00, 0x84, 0x84,	/* 14:Ë†Ãƒâ€šÂ¢Ââ€¦ÂF */
+		0x84, 0x84, 0x84	/* 15:Ë†Ãƒâ€šÂ¢Å DÂF */
 	};
 	unsigned char table2[216 * 3];
 	int r, g, b;
@@ -41,8 +41,8 @@ void init_palette(void)
 void set_palette(int start, int end, unsigned char *rgb)
 {
 	int i, eflags;
-	eflags = io_load_eflags();	/* Š„‚è‚İ‹–‰Âƒtƒ‰ƒO‚Ì’l‚ğ‹L˜^‚·‚é */
-	io_cli(); 					/* ‹–‰Âƒtƒ‰ƒO‚ğ0‚É‚µ‚ÄŠ„‚è‚İ‹Ö~‚É‚·‚é */
+	eflags = io_load_eflags();	/* Å â€â€šÃ¨ÂÅ¾â€šÃâ€¹â€“â€°Ã‚Æ’tÆ’â€°Æ’Oâ€šÃŒâ€™lâ€šÃ°â€¹LËœ^â€šÂ·â€šÃ© */
+	io_cli(); 					/* â€¹â€“â€°Ã‚Æ’tÆ’â€°Æ’Oâ€šÃ°0â€šÃ‰â€šÂµâ€šÃ„Å â€â€šÃ¨ÂÅ¾â€šÃâ€¹Ã–Å½~â€šÃ‰â€šÂ·â€šÃ© */
 	io_out8(0x03c8, start);
 	for (i = start; i <= end; i++) {
 		io_out8(0x03c9, rgb[0] / 4);
@@ -50,7 +50,7 @@ void set_palette(int start, int end, unsigned char *rgb)
 		io_out8(0x03c9, rgb[2] / 4);
 		rgb += 3;
 	}
-	io_store_eflags(eflags);	/* Š„‚è‚İ‹–‰Âƒtƒ‰ƒO‚ğŒ³‚É–ß‚· */
+	io_store_eflags(eflags);	/* Å â€â€šÃ¨ÂÅ¾â€šÃâ€¹â€“â€°Ã‚Æ’tÆ’â€°Æ’Oâ€šÃ°Å’Â³â€šÃ‰â€“ÃŸâ€šÂ· */
 	return;
 }
 
@@ -108,7 +108,8 @@ void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s
 {
 	extern char hankaku[4096];
     struct TASK *task = task_now();
-    char *nihongo = (char *) *((int *) 0x0fe8);
+    char *nihongo = (char *) *((int *) 0x0fe8), *font;
+    int k, t; /* å­˜æ”¾å­—çš„å±±åŒºå’Œç‚¹æ•° */
 
     if (task->langmode == 0) {
         for (; *s != 0x00; s++) {
@@ -119,7 +120,50 @@ void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s
     }
     if (task->langmode == 1) {
         for (; *s != 0x00; s++) {
-            putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+            if (task->langbyte1 == 0) {
+                if ((0x81 <= *s && *s <= 0x9f) || (0xe0 <= *s && *s <= 0xfc)) {
+                    task->langbyte1 = *s;
+                }else {
+                    putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+                }
+            }else {
+                if ((0x81 <= task->langbyte1 && task->langbyte1 <= 0x9f)) {
+                    k = (task->langbyte1 - 0x81) * 2;
+                }else {
+                    k = (task->langbyte1 - 0xe0) * 2 + 62;
+                }
+                if (0x40 <= *s && *s <= 0x7e) {
+                    t = *s - 0x40;
+                }else if (0x80 <= *s && *s <= 0x9e) {
+                    t = *s - 0x80 + 63;
+                }else {
+                    t = *s - 0x9f;
+                    k++;
+                }
+                task->langbyte1 = 0;
+                font = nihongo + 256  * 16 + (k * 94 + t) * 32;
+                putfont8(vram, xsize, x - 8, y, c, font     ); /* å·¦åŠéƒ¨åˆ† */
+                putfont8(vram, xsize, x    , y, c, font + 16); /* å³åŠéƒ¨åˆ† */
+            }
+            x += 8;
+        }
+    }
+    if (task->langmode == 2) {
+        for (; *s != 0x00; s++) {
+            if (task->langbyte1 == 0) {
+                if (0x81 <= *s && *s <= 0xfe) {
+                    task->langbyte1 = *s;
+                }else {
+                    putfont8(vram, xsize, x, y, c, nihongo + *s * 16);
+                }
+            }else {
+                k = task->langbyte1 - 0xa1;
+                t = *s - 0xa1;
+                task->langbyte1 = 0;
+                font = nihongo + 256 * 16 + (k * 94 + t) * 32;
+                putfont8(vram, xsize, x - 8, y, c, font     ); /* å·¦åŠéƒ¨åˆ† */
+                putfont8(vram, xsize, x,     y, c, font + 16); /* å³åŠéƒ¨åˆ† */
+            }
             x += 8;
         }
     }
@@ -127,7 +171,7 @@ void putfonts8_asc(char *vram, int xsize, int x, int y, char c, unsigned char *s
 }
 
 void init_mouse_cursor8(char *mouse, char bc)
-/* ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ğ€”õi16x16j */
+/* Æ’}Æ’EÆ’XÆ’JÂ[Æ’\Æ’â€¹â€šÃ°Ââ‚¬â€ÃµÂi16x16Âj */
 {
 	static char cursor[16][16] = {
 		"**************..",

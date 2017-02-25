@@ -27,6 +27,7 @@ haribote.img : haribote/ipl10.bin haribote/haribote.sys Makefile \
 		copy from:haribote/haribote.sys to:@: \
 		copy from:haribote/ipl10.nas to:@: \
 		copy from:make.bat to:@: \
+		copy from:euc.txt to:@: \
 		copy from:a/a.hrb to:@: \
 		copy from:hello3/hello3.hrb to:@: \
 		copy from:hello4/hello4.hrb to:@: \
