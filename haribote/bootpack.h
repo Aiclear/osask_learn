@@ -214,6 +214,12 @@ struct TASK {
     struct SEGMENT_DESCRIPTOR ldt[2];
 	struct CONSOLE *cons;
 	int ds_base, cons_stack; /* save task stack address */
+<<<<<<< HEAD:haribote/bootpack.h
+=======
+    struct FILEHANDLE *fhandle;
+    int *fat;
+    char *cmdline;
+>>>>>>> devlope:haribote/bootpack.h
 };
 struct TASKLEVEL {
 	int running; /* ìÆçÏÇµÇƒÇ¢ÇÈÉ^ÉXÉNÇÃêî */
@@ -247,6 +253,12 @@ struct CONSOLE {
 	struct SHEET *sht;
 	int cur_x, cur_y, cur_c;
 	struct TIMER *timer;
+};
+
+struct FILEHANDLE {
+    char *buf;
+    int size;
+    int pos;
 };
 void console_task(struct SHEET *sheet, int memtotal);
 void cons_putchar(struct CONSOLE *cons, int chr, char move);
