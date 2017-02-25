@@ -194,11 +194,6 @@ void cons_runcmd(char *cmdline, struct CONSOLE *cons, int *fat, int memtotal)
 		cmd_cls(cons);
 	} else if (strcmp(cmdline, "dir") == 0 && cons->sht != 0) {
 		cmd_dir(cons);
-<<<<<<< HEAD:haribote/console.c
-	} else if (strncmp(cmdline, "type ", 5) == 0 && cons->sht != 0) {
-		cmd_type(cons, fat, cmdline);
-=======
->>>>>>> devlope:haribote/console.c
     } else if (strcmp(cmdline, "exit") == 0) {
         cmd_exit(cons, fat);
     } else if (strncmp(cmdline, "start ", 6) == 0) {
@@ -261,59 +256,6 @@ void cmd_dir(struct CONSOLE *cons)
 	}
 	cons_newline(cons);
 	return;
-}
-
-void cmd_exit(struct CONSOLE *cons, int *fat)
-{
-    struct MEMMAN *memman = (struct MEMMAN *) MEMMAN_ADDR;
-    struct TASK *task = task_now();
-    struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
-    struct FIFO32 *fifo = (struct FIFO32 *) *((int *) 0x0fec);
-    if (cons->sht != 0) {
-        timer_cancel(cons->timer);
-    }
-    memman_free_4k(memman, (int) fat, 4 * 2880);
-    io_cli();
-    if (cons->sht != 0) {
-        fifo32_put(fifo, cons->sht - shtctl->sheets0 + 768);	/* 768〜1023 */
-
-    }else {
-        fifo32_put(fifo, task - taskctl->tasks0 + 1024);
-    }
-    io_sti();
-    for (;;) {
-        task_sleep(task);
-    }
-}
-
-void cmd_start(struct CONSOLE *cons, char *cmdline, int memtotal)
-{
-    struct SHTCTL *shtctl = (struct SHTCTL *) *((int *) 0x0fe4);
-    struct SHEET *sht = open_console(shtctl, memtotal);
-    struct FIFO32 *fifo = &sht->task->fifo;
-    int i;
-    sheet_slide(sht, 34, 2);
-    sheet_updown(sht, shtctl->top);
-    for (i = 6; cmdline[i] != 0; i++) {
-        fifo32_put(fifo, cmdline[i] + 256);
-    }
-    fifo32_put(fifo, 10 + 256);
-    cons_newline(cons);
-    return;
-}
-
-void cmd_ncst(struct CONSOLE *cons, char *cmdline, int memtotal)
-{
-    struct TASK *task = open_constask(0, memtotal);
-    struct FIFO32 *fifo = &task->fifo;
-    int i;
-    /* コマンドラインに入力された文字列を、一文字ずつ新しいコンソールに入力 */
-    for (i = 5; cmdline[i] != 0; i++) {
-        fifo32_put(fifo, cmdline[i] + 256);
-    }
-    fifo32_put(fifo, 10 + 256);	/* Enter */
-    cons_newline(cons);
-    return;
 }
 
 void cmd_exit(struct CONSOLE *cons, int *fat)

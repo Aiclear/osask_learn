@@ -214,12 +214,9 @@ struct TASK {
     struct SEGMENT_DESCRIPTOR ldt[2];
 	struct CONSOLE *cons;
 	int ds_base, cons_stack; /* save task stack address */
-<<<<<<< HEAD:haribote/bootpack.h
-=======
     struct FILEHANDLE *fhandle;
     int *fat;
     char *cmdline;
->>>>>>> devlope:haribote/bootpack.h
 };
 struct TASKLEVEL {
 	int running; /* “®ì‚µ‚Ä‚¢‚éƒ^ƒXƒN‚Ì” */
