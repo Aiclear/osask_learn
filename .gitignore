@@ -3,14 +3,30 @@
 
 # Object files
 *.o
+*/*.o
 *.ko
+*/*.ko
 *.obj
+*/*.obj
 *.elf
+*/*.elf
 
 # Linker output
 *.ilk
 *.map
 *.exp
+*.lst
+*/*.lst
+*.bim
+*/*.bim
+*.hrb
+*/*.hrb
+*.blm
+*/*.blm
+*.bin
+*/*.bin
+*.sys
+*/*.sys
 
 # Precompiled Headers
 *.gch
@@ -18,6 +34,7 @@
 
 # Libraries
 *.lib
+*/*.lib
 *.a
 *.la
 *.lo
@@ -30,6 +47,7 @@
 
 # Executables
 *.exe
+*/*.exe
 *.out
 *.app
 *.i*86
